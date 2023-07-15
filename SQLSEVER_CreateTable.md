@@ -25,20 +25,20 @@
 ### 2.构思表格之间的字段关系  
 
 - 如图：  
-  ![图片链接](https://github.com/KaryoYou/SQLSERVER_CreateTable/blob/main/TableContact.jpg "TableContact.jpg")  
+  ![图片链接](https://github.com/KaryoYou/SQLSERVER_CreateTable/blob/main/TableContact.jpg?raw=true "TableContact.jpg")  
 
 ### 3.设定各个表格的仅需字段  
 
 - 具体内容纯属虚构，如有雷同，博主内心窃喜（真NB，构思完全正确。）  
 
 - 物料表：  
-  ![图片链接](https://github.com/KaryoYou/SQLSERVER_CreateTable/blob/main/tbl_MaterialList.jpg "tbl_MaterialList.jpg")  
+  ![图片链接](https://github.com/KaryoYou/SQLSERVER_CreateTable/blob/main/tbl_MaterialList.jpg?raw=true "tbl_MaterialList.jpg")  
 
 - 采购订单总表：  
-  ![图片链接](https://github.com/KaryoYou/SQLSERVER_CreateTable/blob/main/tbl_PurchaseOrder.jpg "tbl_PurchaseOrder.jpg")  
+  ![图片链接](https://github.com/KaryoYou/SQLSERVER_CreateTable/blob/main/tbl_PurchaseOrder.jpg?raw=true "tbl_PurchaseOrder.jpg")  
 
 - 采购订单明细表：  
-  ![图片链接](https://github.com/KaryoYou/SQLSERVER_CreateTable/blob/main/tbl_PurchaseOrderDetail.jpg "tbl_PurchaseOrderDetail.jpg")  
+  ![图片链接](https://github.com/KaryoYou/SQLSERVER_CreateTable/blob/main/tbl_PurchaseOrderDetail.jpg?raw=true "tbl_PurchaseOrderDetail.jpg")  
 
 ### 4.明确字段的数据类型、约束以及索引  
 
@@ -55,10 +55,10 @@
 - 类型5：时间值，使用`datetime`。  
 - 类型6：可通过系统自动获取的值,使用‘计算列规范’。  
   - 如：`gatdate()`。  
-	![图片链接](https://github.com/KaryoYou/SQLSERVER_CreateTable/blob/main/CalculationColumn.jpg "CalculationColumn.jpg")  
+	![图片链接](https://github.com/KaryoYou/SQLSERVER_CreateTable/blob/main/CalculationColumn.jpg?raw=true "CalculationColumn.jpg")  
 - 类型7：可通过记录自身包含的内容计算得到的值,使用‘计算列规范’  
   - 如：` AS 'columnName1' * 'columnName2'`  
-    ![图片链接](https://github.com/KaryoYou/SQLSERVER_CreateTable/blob/main/CalculationColumn2.jpg "CalculationColumn2.jpg")  
+    ![图片链接](https://github.com/KaryoYou/SQLSERVER_CreateTable/blob/main/CalculationColumn2.jpg?raw=true "CalculationColumn2.jpg")  
 - 约束1：主要关键的数据，且不会重复，作为主键。  
   - 如：物料表中的物料编码。  
 - 约束2：次要关键的数据，且来自其他表中的主键，作为外键。  
@@ -72,7 +72,7 @@
   - 非聚集索引可以设置包含返回的列，设置顺序按数据的基数（查询时作为条件值不一致的数量：`A`和`A`为1种，`A`和`a`为1种，`A`和`B`为2种类）从小到大对应上到下排序  
   - 如：高频的通过采购明细表中的采购单和物料编码查询返回的货币、税率、单价、数量。  
 - 索引如图：  
-![图片链接](https://github.com/KaryoYou/SQLSERVER_CreateTable/blob/main/Index.jpg "Index.jpg")  
+![图片链接](https://github.com/KaryoYou/SQLSERVER_CreateTable/blob/main/Index.jpg?raw=true "Index.jpg")  
 
 ##  实现：仅通过1个SQL文件来创建以上内容  
 
