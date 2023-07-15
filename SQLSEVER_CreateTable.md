@@ -82,6 +82,7 @@
 
 ###  代码如下，请慢用  
 
+ - GitHub Link：https://github.com/KaryoYou/SQLSERVER_CreateTable.git
  - SQL执行之前，大家需要自行将`USE test`改为需要创建表的数据库对象`USE 数据库名`  
 
 ``` SQL SERVER  
