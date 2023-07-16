@@ -1,70 +1,70 @@
 USE test;
 
---´´½¨ÎïÁÏÇåµ¥Ã÷Ï¸±í----------------------------------------------------------------------
+--åˆ›å»ºç‰©æ–™æ¸…å•æ˜Žç»†è¡¨----------------------------------------------------------------------
 CREATE TABLE tbl_MaterialList (
-	AutoNum				int				IDENTITY(1,1)		NOT NULL,	--×Ô¶¯Ìî³äÐòºÅ
-	ApproverTag			BIT				DEFAULT 0			NOT NULL,	--ÊÇ·ñ¹ýÉó,ÉóÅú±êÇ©
-	CodePrefix			VARCHAR(3)							NULL,		--±àºÅÇ°×º
-	Code				VARCHAR(10)							NOT NULL,	--±àºÅ
-	NameEN				VARCHAR(30)							NOT NULL,	--½»¸¶µØÖ·
-	NameCH				NVARCHAR(20)						NOT NULL,	--×ÓÐòºÅ,ÅÅÐò¶©µ¥ÎïÁÏË³Ðò,±ãÓÚºË¶Ô
-	Model				NVARCHAR(50)						NULL,		--ÐÍºÅ
-	Size				NVARCHAR(50)						NULL,		--¹æ¸ñ			
-	Unit				NVARCHAR(10)	DEFAULT 'PCS'		NOT NULL,	--ÎïÁÏ¼ÆÁ¿µ¥Î»
-	UnitWeight			DECIMAL(18,6)	DEFAULT 0			NOT NULL,	--µ¥Î»ÖØÁ¿
-	DrawingNo			NVARCHAR(50)						NULL,		--Í¼ºÅ
-	Remark				NVARCHAR(255)						NULL,		--±¸×¢
-	MakerID				VARCHAR(10)							NOT NULL,	--ÖÆ×÷ÈËID
-	AmenderIDRecent		VARCHAR(10)							NULL,		--ÐÞ¸ÄÈËID,×î½ü¼ÇÂ¼
-	ApproverID			VARCHAR(10)							NULL,		--ÉóÅúÈËID
-	RecordDate			DATETIME		DEFAULT(GETDATE())	NOT NULL,	--´´½¨Ê±¼ä,Ê×´Î¼ÇÂ¼
-	AmendDateRecent		AS GETDATE(),									--ÐÞ¸ÄÊ±¼ä,×î½ü¼ÇÂ¼
+	AutoNum				int				IDENTITY(1,1)		NOT NULL,	--è‡ªåŠ¨å¡«å……åºå·
+	ApproverTag			BIT				DEFAULT 0			NOT NULL,	--æ˜¯å¦è¿‡å®¡,å®¡æ‰¹æ ‡ç­¾
+	CodePrefix			VARCHAR(3)							NULL,		--ç¼–å·å‰ç¼€
+	Code				VARCHAR(10)							NOT NULL,	--ç¼–å·
+	NameEN				VARCHAR(30)							NOT NULL,	--ä¸­æ–‡åç§°
+	NameCH				NVARCHAR(20)						NOT NULL,	--è‹±æ–‡åç§°
+	Model				NVARCHAR(50)						NULL,		--åž‹å·
+	Size				NVARCHAR(50)						NULL,		--è§„æ ¼
+	Unit				NVARCHAR(10)	DEFAULT 'PCS'		NOT NULL,	--ç‰©æ–™è®¡é‡å•ä½
+	UnitWeight			DECIMAL(18,6)	DEFAULT 0			NOT NULL,	--å•ä½é‡é‡
+	DrawingNo			NVARCHAR(50)						NULL,		--å›¾å·
+	Remark				NVARCHAR(255)						NULL,		--å¤‡æ³¨
+	MakerID				VARCHAR(10)							NOT NULL,	--åˆ¶ä½œäººID
+	AmenderIDRecent		VARCHAR(10)							NULL,		--ä¿®æ”¹äººID,æœ€è¿‘è®°å½•
+	ApproverID			VARCHAR(10)							NULL,		--å®¡æ‰¹äººID
+	RecordDate			DATETIME		DEFAULT(GETDATE())	NOT NULL,	--åˆ›å»ºæ—¶é—´,é¦–æ¬¡è®°å½•
+	AmendDateRecent		AS GETDATE(),									--ä¿®æ”¹æ—¶é—´,æœ€è¿‘è®°å½•
     CONSTRAINT PK_Code PRIMARY KEY CLUSTERED (Code)
 )
 
-CREATE UNIQUE NONCLUSTERED			--´´½¨Î¨Ò»·Ç¾Û¼¯Ë÷Òý
-INDEX UQ_Clu_Code					--Ë÷ÒýÃû³Æ
+CREATE UNIQUE NONCLUSTERED			--åˆ›å»ºå”¯ä¸€éžèšé›†ç´¢å¼•
+INDEX UQ_Clu_Code					--ç´¢å¼•åç§°
 ON tbl_MaterialList (CodePrefix,Code)
-INCLUDE (Unit,UnitWeight, NameEN, NameCH,Model,Size,DrawingNo) --°üº¬¼ü_ÁÐ
+INCLUDE (Unit,UnitWeight, NameEN, NameCH,Model,Size,DrawingNo) --åŒ…å«é”®_åˆ—
 WITH (
-	FILLFACTOR = 80,	--Ìî³äÒò×ÓÎª80%
-    PAD_INDEX = ON		--ÆôÓÃÌî³ä		
+	FILLFACTOR = 80,	--å¡«å……å› å­ä¸º80%
+    PAD_INDEX = ON		--å¯ç”¨å¡«å……
 );
 
---ÉùÃ÷±äÁ¿,Ô¤±¸Ê¹ÓÃÓÎ±êÌí¼Ó±íÉè¼ÆËµÃ÷
+--å£°æ˜Žå˜é‡,é¢„å¤‡ä½¿ç”¨æ¸¸æ ‡æ·»åŠ è¡¨è®¾è®¡è¯´æ˜Ž
 DECLARE @myname			NVARCHAR(100) = N'MS_Description',
-        @myvalue		NVARCHAR(100), --ËµÃ÷ÄÚÈÝ
+        @myvalue		NVARCHAR(100), --è¯´æ˜Žå†…å®¹
 		@mylevel0type	NVARCHAR(100) = N'SCHEMA',
         @mylevel0name	NVARCHAR(100) = N'dbo',
         @mylevel1type	NVARCHAR(100) = N'TABLE',
-        @mylevel1name	NVARCHAR(100) = N'tbl_MaterialList',  --±íÃû
+        @mylevel1name	NVARCHAR(100) = N'tbl_MaterialList',  --è¡¨å
         @mylevel2type	NVARCHAR(100) = N'COLUMN',
-        @mylevel2name	NVARCHAR(100); --×Ö¶ÎÃû
+        @mylevel2name	NVARCHAR(100); --å­—æ®µå
 
---ÉùÃ÷ÓÎ±ê±äÁ¿,²¢ÎªÓÎ±ê¸³Óè¼ÇÂ¼¼¯
+--å£°æ˜Žæ¸¸æ ‡å˜é‡,å¹¶ä¸ºæ¸¸æ ‡èµ‹äºˆè®°å½•é›†
 DECLARE CUR1 CURSOR FOR
-SELECT N'AutoNum',			N'×Ô¶¯Ìî³äÐòºÅ'						UNION ALL
-SELECT N'Code',				N'±àºÅ'								UNION ALL
-SELECT N'NameEN',			N'Ãû³ÆÓ¢ÎÄ'							UNION ALL
-SELECT N'NameCH',			N'Ãû³ÆÖÐÎÄ'							UNION ALL
-SELECT N'Model',			N'ÐÍºÅ'								UNION ALL
-SELECT N'Size',				N'¹æ¸ñ'								UNION ALL
-SELECT N'Unit',				N'ÎïÁÏ¼ÆÁ¿µ¥Î»'						UNION ALL
-SELECT N'UnitWeight',		N'µ¥Î»ÖØÁ¿'							UNION ALL
-SELECT N'DrawingNo',		N'Í¼ºÅ'								UNION ALL
-SELECT N'Remark',			N'±¸×¢'								UNION ALL
-SELECT N'MakerID',			N'ÖÆ×÷ÈËID'							UNION ALL
-SELECT N'AmenderIDRecent',	N'ÐÞ¸ÄÈËID,×î½ü¼ÇÂ¼'					UNION ALL
-SELECT N'ApproverID',		N'ÉóÅúÈËID'							UNION ALL
-SELECT N'RecordDate',		N'´´½¨Ê±¼ä,Ê×´Î¼ÇÂ¼'					UNION ALL
-SELECT N'AmendDateRecent',	N'ÐÞ¸ÄÊ±¼ä,×î½ü¼ÇÂ¼'
+SELECT N'AutoNum',			N'è‡ªåŠ¨å¡«å……åºå·'						UNION ALL
+SELECT N'Code',				N'ç¼–å·'								UNION ALL
+SELECT N'NameEN',			N'åç§°è‹±æ–‡'							UNION ALL
+SELECT N'NameCH',			N'åç§°ä¸­æ–‡'							UNION ALL
+SELECT N'Model',			N'åž‹å·'								UNION ALL
+SELECT N'Size',				N'è§„æ ¼'								UNION ALL
+SELECT N'Unit',				N'ç‰©æ–™è®¡é‡å•ä½'						UNION ALL
+SELECT N'UnitWeight',		N'å•ä½é‡é‡'							UNION ALL
+SELECT N'DrawingNo',		N'å›¾å·'								UNION ALL
+SELECT N'Remark',			N'å¤‡æ³¨'								UNION ALL
+SELECT N'MakerID',			N'åˆ¶ä½œäººID'							UNION ALL
+SELECT N'AmenderIDRecent',	N'ä¿®æ”¹äººID,æœ€è¿‘è®°å½•'					UNION ALL
+SELECT N'ApproverID',		N'å®¡æ‰¹äººID'							UNION ALL
+SELECT N'RecordDate',		N'åˆ›å»ºæ—¶é—´,é¦–æ¬¡è®°å½•'					UNION ALL
+SELECT N'AmendDateRecent',	N'ä¿®æ”¹æ—¶é—´,æœ€è¿‘è®°å½•'
 
---´ò¿ªÓÎ±ê,¿ªÊ¼¶ÁÈ¡´ÓÍ·µ½Î²¶ÁÈ¡¼ÇÂ¼¼¯,²¢¸³Öµ¸ø±äÁ¿
+--æ‰“å¼€æ¸¸æ ‡,å¼€å§‹è¯»å–ä»Žå¤´åˆ°å°¾è¯»å–è®°å½•é›†,å¹¶èµ‹å€¼ç»™å˜é‡
 OPEN CUR1
-FETCH NEXT FROM CUR1 INTO @mylevel2name,@myvalue --¶ÁÈ¡ÏÂÒ»ÐÐ¼ÇÂ¼,´ò¿ªÊ±Ã»¶Á
+FETCH NEXT FROM CUR1 INTO @mylevel2name,@myvalue --è¯»å–ä¸‹ä¸€è¡Œè®°å½•,æ‰“å¼€æ—¶æ²¡è¯»
 WHILE @@FETCH_STATUS = 0
 BEGIN
-	--Ìí¼Ó±íÉè¼ÆËµÃ÷
+	--æ·»åŠ è¡¨è®¾è®¡è¯´æ˜Ž
 	EXEC sys.sp_addextendedproperty @name		= @myname,
 									@value		= @myvalue,
 									@level0type = @mylevel0type,
@@ -72,76 +72,76 @@ BEGIN
 									@level1type = @mylevel1type,
 									@level1name = @mylevel1name,
 									@level2type = @mylevel2type,
-									@level2name = @mylevel2name; 
-	
-	FETCH NEXT FROM CUR1 INTO @mylevel2name,@myvalue --¶ÁÈ¡ÏÂÒ»ÐÐ¼ÇÂ¼,²»¶ÁÔòsi..ËÀÑ­»·
-END
-CLOSE CUR1		--¹Ø±ÕÓÎ±ê
-DEALLOCATE CUR1	--ÊÍ·ÅÓÎ±ê
+									@level2name = @mylevel2name;
 
---´´½¨²É¹º¶©µ¥±í----------------------------------------------------------------------
+	FETCH NEXT FROM CUR1 INTO @mylevel2name,@myvalue --è¯»å–ä¸‹ä¸€è¡Œè®°å½•,ä¸è¯»åˆ™si..æ­»å¾ªçŽ¯
+END
+CLOSE CUR1		--å…³é—­æ¸¸æ ‡
+DEALLOCATE CUR1	--é‡Šæ”¾æ¸¸æ ‡
+
+--åˆ›å»ºé‡‡è´­è®¢å•è¡¨----------------------------------------------------------------------
 CREATE TABLE tbl_PurchaseOrder (
-	AutoNum			int				IDENTITY(1,1)		NOT NULL,	--×Ô¶¯Ìî³äÐòºÅ
-	ApproveTag		BIT				DEFAULT 0			NOT NULL,	--ÊÇ·ñÅú×¼,Åú×¼±êÇ©
-	CloseTag		BIT				DEFAULT 0			NOT NULL,	--ÊÇ·ñ¹Ø±Õ,¹Øµ¥±êÇ©
-	SupplierID		VARCHAR(10)							NOT NULL,	--¹©Ó¦ÉÌID
-	PurchaseID		VARCHAR(14)							NOT NULL,	--²É¹ºµ¥±àºÅ
-	PurchaseType	NVARCHAR(50)						NULL,		--²É¹ºµ¥ÀàÐÍ
-	OrderDate		DATETIME							NOT NULL,	--¶©µ¥ÈÕÆÚ
-	ExpectedDate	DATETIME							NULL,		--Ô¤ÆÚ½»¸¶ÈÕÆÚ
-	Remark			NVARCHAR(255)						NULL,		--±¸×¢
-	MakerID			VARCHAR(10)							NOT NULL,	--ÖÆµ¥ÈËID
-	ApproverID		VARCHAR(10)							NULL,		--ÉóÅúÈËID
-	CloserID		VARCHAR(10)							NULL,		--¹Øµ¥ÈËID
-	PrinterID		NVARCHAR(255)						NULL,		--´òÓ¡ÈËID
-	Printed			SMALLINT		DEFAULT 0			NOT NULL,	--´òÓ¡´ÎÊý
-	RecordDate		DATETIME		DEFAULT(GETDATE())	NOT NULL,	--´´½¨Ê±¼ä,Ê×´Î¼ÇÂ¼
-	AmendDateRecent DATETIME                            NULL,		--ÐÞ¸ÄÊ±¼ä,×î½ü¼ÇÂ¼
-	PrintDateRecent	DATETIME                            NULL,		--´òÓ¡Ê±¼ä,¼ÇÂ¼×î½ü
-	CloseDate		DATETIME                            NULL,		--¹Ø±ÕÊ±¼ä,½áÊø¶©µ¥¼ÇÂ¼
+	AutoNum			int				IDENTITY(1,1)		NOT NULL,	--è‡ªåŠ¨å¡«å……åºå·
+	ApproveTag		BIT				DEFAULT 0			NOT NULL,	--æ˜¯å¦æ‰¹å‡†,æ‰¹å‡†æ ‡ç­¾
+	CloseTag		BIT				DEFAULT 0			NOT NULL,	--æ˜¯å¦å…³é—­,å…³å•æ ‡ç­¾
+	SupplierID		VARCHAR(10)							NOT NULL,	--ä¾›åº”å•†ID
+	PurchaseID		VARCHAR(14)							NOT NULL,	--é‡‡è´­å•ç¼–å·
+	PurchaseType	NVARCHAR(50)						NULL,		--é‡‡è´­å•ç±»åž‹
+	OrderDate		DATETIME							NOT NULL,	--è®¢å•æ—¥æœŸ
+	ExpectedDate	DATETIME							NULL,		--é¢„æœŸäº¤ä»˜æ—¥æœŸ
+	Remark			NVARCHAR(255)						NULL,		--å¤‡æ³¨
+	MakerID			VARCHAR(10)							NOT NULL,	--åˆ¶å•äººID
+	ApproverID		VARCHAR(10)							NULL,		--å®¡æ‰¹äººID
+	CloserID		VARCHAR(10)							NULL,		--å…³å•äººID
+	PrinterID		NVARCHAR(255)						NULL,		--æ‰“å°äººID
+	Printed			SMALLINT		DEFAULT 0			NOT NULL,	--æ‰“å°æ¬¡æ•°
+	RecordDate		DATETIME		DEFAULT(GETDATE())	NOT NULL,	--åˆ›å»ºæ—¶é—´,é¦–æ¬¡è®°å½•
+	AmendDateRecent DATETIME                            NULL,		--ä¿®æ”¹æ—¶é—´,æœ€è¿‘è®°å½•
+	PrintDateRecent	DATETIME                            NULL,		--æ‰“å°æ—¶é—´,è®°å½•æœ€è¿‘
+	CloseDate		DATETIME                            NULL,		--å…³é—­æ—¶é—´,ç»“æŸè®¢å•è®°å½•
 	CONSTRAINT PK_PurchNo PRIMARY KEY CLUSTERED (PurchaseID)
 )
 
-CREATE UNIQUE NONCLUSTERED			--´´½¨Î¨Ò»¾Û¼¯Ë÷Òý
-INDEX UQ_Clu_PurcID					--Ë÷ÒýÃû³Æ
-ON tbl_PurchaseOrder(PurchaseID)    --Êý¾Ý±íÃû³Æ£¨½¨Á¢Ë÷ÒýµÄÁÐÃû£©
+CREATE UNIQUE NONCLUSTERED			--åˆ›å»ºå”¯ä¸€èšé›†ç´¢å¼•
+INDEX UQ_Clu_PurcID					--ç´¢å¼•åç§°
+ON tbl_PurchaseOrder(PurchaseID)    --æ•°æ®è¡¨åç§°ï¼ˆå»ºç«‹ç´¢å¼•çš„åˆ—åï¼‰
 WITH (
-	FILLFACTOR = 80,	--Ìî³äÒò×ÓÎª80%
-    PAD_INDEX = ON		--ÆôÓÃÌî³ä		
+	FILLFACTOR = 80,	--å¡«å……å› å­ä¸º80%
+    PAD_INDEX = ON		--å¯ç”¨å¡«å……
 );
 
---ÉùÃ÷±äÁ¿,Ô¤±¸Ê¹ÓÃÓÎ±êÌí¼Ó±íÉè¼ÆËµÃ÷
-SET		@myvalue		= NULL --ËµÃ÷ÄÚÈÝ
-SET		@mylevel1name	= N'tbl_PurchaseOrder'  --±íÃû
-SET		@mylevel2name	= NULL --×Ö¶ÎÃû
+--å£°æ˜Žå˜é‡,é¢„å¤‡ä½¿ç”¨æ¸¸æ ‡æ·»åŠ è¡¨è®¾è®¡è¯´æ˜Ž
+SET		@myvalue		= NULL --è¯´æ˜Žå†…å®¹
+SET		@mylevel1name	= N'tbl_PurchaseOrder'  --è¡¨å
+SET		@mylevel2name	= NULL --å­—æ®µå
 
---ÉùÃ÷ÓÎ±ê±äÁ¿,²¢ÎªÓÎ±ê¸³Óè¼ÇÂ¼¼¯
+--å£°æ˜Žæ¸¸æ ‡å˜é‡,å¹¶ä¸ºæ¸¸æ ‡èµ‹äºˆè®°å½•é›†
 DECLARE CUR2 CURSOR FOR
-SELECT N'AutoNum',			N'×Ô¶¯Ìî³äÐòºÅ'			UNION ALL
-SELECT N'ApproveTag',		N'ÊÇ·ñÅú×¼,Åú×¼±êÇ©'		UNION ALL
-SELECT N'CloseTag',			N'ÊÇ·ñ¹Ø±Õ,¹Øµ¥±êÇ©'		UNION ALL
-SELECT N'SupplierID',		N'¹©Ó¦ÉÌID'				UNION ALL
-SELECT N'PurchaseID',		N'²É¹ºµ¥±àºÅ'				UNION ALL
-SELECT N'PurchaseType',		N'²É¹ºµ¥ÀàÐÍ'				UNION ALL
-SELECT N'OrderDate',		N'¶©µ¥ÈÕÆÚ'				UNION ALL
-SELECT N'ExpectedDate',		N'Ô¤ÆÚ½»¸¶ÈÕÆÚ'			UNION ALL
-SELECT N'Remark',			N'±¸×¢'					UNION ALL
-SELECT N'MakerID',			N'ÖÆµ¥ÈËID'				UNION ALL
-SELECT N'ApproverID',		N'ÉóÅúÈËID'				UNION ALL
-SELECT N'CloserID',			N'¹Øµ¥ÈËID'				UNION ALL
-SELECT N'PrinterID',		N'´òÓ¡ÈËID'				UNION ALL
-SELECT N'Printed',			N'´òÓ¡´ÎÊý'				UNION ALL
-SELECT N'RecordDate',		N'´´½¨Ê±¼ä,Ê×´Î¼ÇÂ¼'		UNION ALL
-SELECT N'AmendDateRecent',	N'ÐÞ¸ÄÊ±¼ä,×î½ü¼ÇÂ¼'		UNION ALL
-SELECT N'PrintDateRecent',	N'´òÓ¡Ê±¼ä,¼ÇÂ¼×î½ü'		UNION ALL
-SELECT N'CloseDate',		N'¹Ø±ÕÊ±¼ä,½áÊø¶©µ¥¼ÇÂ¼'
+SELECT N'AutoNum',			N'è‡ªåŠ¨å¡«å……åºå·'			UNION ALL
+SELECT N'ApproveTag',		N'æ˜¯å¦æ‰¹å‡†,æ‰¹å‡†æ ‡ç­¾'		UNION ALL
+SELECT N'CloseTag',			N'æ˜¯å¦å…³é—­,å…³å•æ ‡ç­¾'		UNION ALL
+SELECT N'SupplierID',		N'ä¾›åº”å•†ID'				UNION ALL
+SELECT N'PurchaseID',		N'é‡‡è´­å•ç¼–å·'				UNION ALL
+SELECT N'PurchaseType',		N'é‡‡è´­å•ç±»åž‹'				UNION ALL
+SELECT N'OrderDate',		N'è®¢å•æ—¥æœŸ'				UNION ALL
+SELECT N'ExpectedDate',		N'é¢„æœŸäº¤ä»˜æ—¥æœŸ'			UNION ALL
+SELECT N'Remark',			N'å¤‡æ³¨'					UNION ALL
+SELECT N'MakerID',			N'åˆ¶å•äººID'				UNION ALL
+SELECT N'ApproverID',		N'å®¡æ‰¹äººID'				UNION ALL
+SELECT N'CloserID',			N'å…³å•äººID'				UNION ALL
+SELECT N'PrinterID',		N'æ‰“å°äººID'				UNION ALL
+SELECT N'Printed',			N'æ‰“å°æ¬¡æ•°'				UNION ALL
+SELECT N'RecordDate',		N'åˆ›å»ºæ—¶é—´,é¦–æ¬¡è®°å½•'		UNION ALL
+SELECT N'AmendDateRecent',	N'ä¿®æ”¹æ—¶é—´,æœ€è¿‘è®°å½•'		UNION ALL
+SELECT N'PrintDateRecent',	N'æ‰“å°æ—¶é—´,è®°å½•æœ€è¿‘'		UNION ALL
+SELECT N'CloseDate',		N'å…³é—­æ—¶é—´,ç»“æŸè®¢å•è®°å½•'
 
---´ò¿ªÓÎ±ê,¿ªÊ¼¶ÁÈ¡´ÓÍ·µ½Î²¶ÁÈ¡¼ÇÂ¼¼¯,²¢¸³Öµ¸ø±äÁ¿
+--æ‰“å¼€æ¸¸æ ‡,å¼€å§‹è¯»å–ä»Žå¤´åˆ°å°¾è¯»å–è®°å½•é›†,å¹¶èµ‹å€¼ç»™å˜é‡
 OPEN CUR2
-FETCH NEXT FROM CUR2 INTO @mylevel2name,@myvalue --¶ÁÈ¡ÏÂÒ»ÐÐ¼ÇÂ¼,´ò¿ªÊ±Ã»¶Á
+FETCH NEXT FROM CUR2 INTO @mylevel2name,@myvalue --è¯»å–ä¸‹ä¸€è¡Œè®°å½•,æ‰“å¼€æ—¶æ²¡è¯»
 WHILE @@FETCH_STATUS = 0
 BEGIN
-	--Ìí¼Ó±íÉè¼ÆËµÃ÷
+	--æ·»åŠ è¡¨è®¾è®¡è¯´æ˜Ž
 	EXEC sys.sp_addextendedproperty @name		= @myname,
 									@value		= @myvalue,
 									@level0type = @mylevel0type,
@@ -151,78 +151,78 @@ BEGIN
 									@level2type = @mylevel2type,
 									@level2name = @mylevel2name; 
 	
-	FETCH NEXT FROM CUR2 INTO @mylevel2name,@myvalue --¶ÁÈ¡ÏÂÒ»ÐÐ¼ÇÂ¼,²»¶ÁÔòsi..ËÀÑ­»·
+	FETCH NEXT FROM CUR2 INTO @mylevel2name,@myvalue --è¯»å–ä¸‹ä¸€è¡Œè®°å½•,ä¸è¯»åˆ™si..æ­»å¾ªçŽ¯
 END
-CLOSE CUR2		--¹Ø±ÕÓÎ±ê
-DEALLOCATE CUR2	--ÊÍ·ÅÓÎ±ê
+CLOSE CUR2		--å…³é—­æ¸¸æ ‡
+DEALLOCATE CUR2	--é‡Šæ”¾æ¸¸æ ‡
 
---´´½¨²É¹º¶©µ¥Ã÷Ï¸±í----------------------------------------------------------------------
+--åˆ›å»ºé‡‡è´­è®¢å•æ˜Žç»†è¡¨----------------------------------------------------------------------
 CREATE TABLE tbl_PurchaseOrderDetail (
-	AutoNum				int				IDENTITY(1,1)		NOT NULL,	--×Ô¶¯Ìî³äÐòºÅ
-	PurchaseID			VARCHAR(14)							NOT NULL,	--²É¹ºµ¥±àºÅ
-	DeliveryAddr		NVARCHAR(250)						NOT NULL,	--½»¸¶µØÖ·
-	SequanceNo			SMALLINT		DEFAULT 0			NOT NULL,	--×ÓÐòºÅ,ÅÅÐò¶©µ¥ÎïÁÏË³Ðò,±ãÓÚºË¶Ô
-	MaterialCode		VARCHAR(10)							NOT NULL,	--ÎïÁÏ±àºÅ
-	MaterialUnit		NVARCHAR(10)						NOT NULL,	--ÎïÁÏ¼ÆÁ¿µ¥Î»
-	Price				DECIMAL(18,6)	DEFAULT 0			NOT NULL,	--º¬Ë°µ¥¼Û,»ùÓÚÎïÁÏ¼ÆÁ¿µ¥Î»
-	PurchaseQuantity	DECIMAL(18,6)	DEFAULT 0			NOT NULL,	--²É¹ºÊýÁ¿
-	DeliveryQuantity	DECIMAL(18,6)	DEFAULT 0			NOT NULL,	--½»¸¶ÊýÁ¿
-	Currency			NVARCHAR(10)						NOT NULL,	--»õ±Ò
-	VAT_Rate			DECIMAL(18,6)	DEFAULT 0			NOT NULL,	--Ë°ÂÊ
-	DeliveryDate		DATETIME                            NULL,		--½»¸¶Ê±¼ä
-	OverdueDay			INT				DEFAULT 0			NOT NULL,	--ÓâÆÚÌìÊý
-	Remark				NVARCHAR(255)						NULL,		--±¸×¢
-	RecordDate			DATETIME		DEFAULT(GETDATE())	NOT NULL,	--´´½¨Ê±¼ä,Ê×´Î¼ÇÂ¼
-	AmendDateRecent		DATETIME                            NULL,		--ÐÞ¸ÄÊ±¼ä,×î½ü¼ÇÂ¼
-	TaxTag				AS (CONVERT(BIT,CASE WHEN VAT_Rate <> 0 THEN 1 ELSE 0 END)),		--ÊÇ·ñº¬Ë°,º¬Ë°±ê¼Ç
-	Amount				AS (CONVERT(DECIMAL(18,6),Price * DeliveryQuantity)),	--º¬Ë°½ð¶î,»ùÓÚ½»¸¶ÊýÁ¿
-	Shortage			AS (CONVERT(DECIMAL(18,6),PurchaseQuantity - DeliveryQuantity)),	--¶ÌÈ±Á¿,¸ºÊýÎªÉÙÈ±,ÕýÊýÎª¶àÓà
+	AutoNum				int				IDENTITY(1,1)		NOT NULL,	--è‡ªåŠ¨å¡«å……åºå·
+	PurchaseID			VARCHAR(14)							NOT NULL,	--é‡‡è´­å•ç¼–å·
+	DeliveryAddr		NVARCHAR(250)						NOT NULL,	--äº¤ä»˜åœ°å€
+	SequanceNo			SMALLINT		DEFAULT 0			NOT NULL,	--å­åºå·,æŽ’åºè®¢å•ç‰©æ–™é¡ºåº,ä¾¿äºŽæ ¸å¯¹
+	MaterialCode		VARCHAR(10)							NOT NULL,	--ç‰©æ–™ç¼–å·
+	MaterialUnit		NVARCHAR(10)						NOT NULL,	--ç‰©æ–™è®¡é‡å•ä½
+	Price				DECIMAL(18,6)	DEFAULT 0			NOT NULL,	--å«ç¨Žå•ä»·,åŸºäºŽç‰©æ–™è®¡é‡å•ä½
+	PurchaseQuantity	DECIMAL(18,6)	DEFAULT 0			NOT NULL,	--é‡‡è´­æ•°é‡
+	DeliveryQuantity	DECIMAL(18,6)	DEFAULT 0			NOT NULL,	--äº¤ä»˜æ•°é‡
+	Currency			NVARCHAR(10)						NOT NULL,	--è´§å¸
+	VAT_Rate			DECIMAL(18,6)	DEFAULT 0			NOT NULL,	--ç¨ŽçŽ‡
+	DeliveryDate		DATETIME                            NULL,		--äº¤ä»˜æ—¶é—´
+	OverdueDay			INT				DEFAULT 0			NOT NULL,	--é€¾æœŸå¤©æ•°
+	Remark				NVARCHAR(255)						NULL,		--å¤‡æ³¨
+	RecordDate			DATETIME		DEFAULT(GETDATE())	NOT NULL,	--åˆ›å»ºæ—¶é—´,é¦–æ¬¡è®°å½•
+	AmendDateRecent		DATETIME                            NULL,		--ä¿®æ”¹æ—¶é—´,æœ€è¿‘è®°å½•
+	TaxTag				AS (CONVERT(BIT,CASE WHEN VAT_Rate <> 0 THEN 1 ELSE 0 END)),		--æ˜¯å¦å«ç¨Ž,å«ç¨Žæ ‡è®°
+	Amount				AS (CONVERT(DECIMAL(18,6),Price * DeliveryQuantity)),	--å«ç¨Žé‡‘é¢,åŸºäºŽäº¤ä»˜æ•°é‡
+	Shortage			AS (CONVERT(DECIMAL(18,6),PurchaseQuantity - DeliveryQuantity)),	--çŸ­ç¼ºé‡,è´Ÿæ•°ä¸ºå°‘ç¼º,æ­£æ•°ä¸ºå¤šä½™
     CONSTRAINT FK_Purch_PurchID FOREIGN KEY (PurchaseID) REFERENCES tbl_PurchaseOrder (PurchaseID) ON DELETE CASCADE ON UPDATE CASCADE,
 	CONSTRAINT FK_MateList_MateCode FOREIGN KEY (MaterialCode) REFERENCES tbl_MaterialList (Code) ON DELETE CASCADE ON UPDATE CASCADE
 )
 
-CREATE NONCLUSTERED	--´´½¨Î¨Ò»¾Û¼¯Ë÷Òý
-INDEX IX_tblPurcD_PurcID	--ÁÐÃû
-ON tbl_PurchaseOrderDetail (PurchaseID); --Êý¾Ý±íÃû³Æ£¨½¨Á¢Ë÷ÒýµÄÁÐÃû£©
+CREATE NONCLUSTERED	--åˆ›å»ºå”¯ä¸€èšé›†ç´¢å¼•
+INDEX IX_tblPurcD_PurcID	--åˆ—å
+ON tbl_PurchaseOrderDetail (PurchaseID); --æ•°æ®è¡¨åç§°ï¼ˆå»ºç«‹ç´¢å¼•çš„åˆ—åï¼‰
 
---´´½¨´øÓÐ·Ç¼üÁÐµÄË÷Òý
-CREATE NONCLUSTERED INDEX IX_tblPurchD_PurcID_MateCode --Ë÷ÒýÃû³Æ
-ON tbl_PurchaseOrderDetail (PurchaseID,MaterialCode) --Ë÷Òý¼ü_ÁÐ
-INCLUDE (Currency,VAT_Rate, Price, DeliveryQuantity); --°üº¬¼ü_ÁÐ
+--åˆ›å»ºå¸¦æœ‰éžé”®åˆ—çš„ç´¢å¼•
+CREATE NONCLUSTERED INDEX IX_tblPurchD_PurcID_MateCode --ç´¢å¼•åç§°
+ON tbl_PurchaseOrderDetail (PurchaseID,MaterialCode) --ç´¢å¼•é”®_åˆ—
+INCLUDE (Currency,VAT_Rate, Price, DeliveryQuantity); --åŒ…å«é”®_åˆ—
 
---ÉùÃ÷±äÁ¿,Ô¤±¸Ê¹ÓÃÓÎ±êÌí¼Ó±íÉè¼ÆËµÃ÷
-SET		@myvalue		= NULL --ËµÃ÷ÄÚÈÝ
-SET		@mylevel1name	= N'tbl_PurchaseOrderDetail'  --±íÃû
-SET		@mylevel2name	= NULL --×Ö¶ÎÃû
+--å£°æ˜Žå˜é‡,é¢„å¤‡ä½¿ç”¨æ¸¸æ ‡æ·»åŠ è¡¨è®¾è®¡è¯´æ˜Ž
+SET		@myvalue		= NULL --è¯´æ˜Žå†…å®¹
+SET		@mylevel1name	= N'tbl_PurchaseOrderDetail'  --è¡¨å
+SET		@mylevel2name	= NULL --å­—æ®µå
 
---ÉùÃ÷ÓÎ±ê±äÁ¿,²¢ÎªÓÎ±ê¸³Óè¼ÇÂ¼¼¯
+--å£°æ˜Žæ¸¸æ ‡å˜é‡,å¹¶ä¸ºæ¸¸æ ‡èµ‹äºˆè®°å½•é›†
 DECLARE CUR3 CURSOR FOR
-SELECT N'AutoNum',			N'×Ô¶¯Ìî³äÐòºÅ'						UNION ALL
-SELECT N'PurchaseID',		N'²É¹ºµ¥±àºÅ'							UNION ALL
-SELECT N'DeliveryAddr',		N'½»¸¶µØÖ·'							UNION ALL
-SELECT N'SequanceNo',		N'×ÓÐòºÅ,ÅÅÐò¶©µ¥ÎïÁÏË³Ðò,±ãÓÚºË¶Ô'		UNION ALL
-SELECT N'MaterialCode',		N'ÎïÁÏ±àºÅ'							UNION ALL
-SELECT N'MaterialUnit',		N'ÎïÁÏ¼ÆÁ¿µ¥Î»'						UNION ALL
-SELECT N'Price',			N'º¬Ë°µ¥¼Û,»ùÓÚÎïÁÏ¼ÆÁ¿µ¥Î»'				UNION ALL
-SELECT N'PurchaseQuantity',	N'²É¹ºÊýÁ¿'							UNION ALL
-SELECT N'DeliveryQuantity',	N'½»¸¶ÊýÁ¿'							UNION ALL
-SELECT N'Amount',			N'º¬Ë°½ð¶î,»ùÓÚ½»¸¶ÊýÁ¿'				UNION ALL
-SELECT N'Currency',			N'»õ±Ò'								UNION ALL
-SELECT N'VAT_Rate',			N'Ë°ÂÊ'								UNION ALL
-SELECT N'DeliveryDate',		N'½»¸¶Ê±¼ä'							UNION ALL
-SELECT N'OverdueDay',		N'ÓâÆÚÌìÊý'							UNION ALL
-SELECT N'Remark',			N'±¸×¢'								UNION ALL
-SELECT N'RecordDate',		N'´´½¨Ê±¼ä,Ê×´Î¼ÇÂ¼'					UNION ALL
-SELECT N'AmendDateRecent',	N'ÐÞ¸ÄÊ±¼ä,×î½ü¼ÇÂ¼'					UNION ALL
-SELECT N'TaxTag',			N'ÊÇ·ñº¬Ë°,º¬Ë°±ê¼Ç'					UNION ALL
-SELECT N'Shortage',			N'¶ÌÈ±Á¿,¸ºÊýÎªÉÙÈ±,ÕýÊýÎª¶àÓà'
+SELECT N'AutoNum',			N'è‡ªåŠ¨å¡«å……åºå·'						UNION ALL
+SELECT N'PurchaseID',		N'é‡‡è´­å•ç¼–å·'							UNION ALL
+SELECT N'DeliveryAddr',		N'äº¤ä»˜åœ°å€'							UNION ALL
+SELECT N'SequanceNo',		N'å­åºå·,æŽ’åºè®¢å•ç‰©æ–™é¡ºåº,ä¾¿äºŽæ ¸å¯¹'		UNION ALL
+SELECT N'MaterialCode',		N'ç‰©æ–™ç¼–å·'							UNION ALL
+SELECT N'MaterialUnit',		N'ç‰©æ–™è®¡é‡å•ä½'						UNION ALL
+SELECT N'Price',			N'å«ç¨Žå•ä»·,åŸºäºŽç‰©æ–™è®¡é‡å•ä½'				UNION ALL
+SELECT N'PurchaseQuantity',	N'é‡‡è´­æ•°é‡'							UNION ALL
+SELECT N'DeliveryQuantity',	N'äº¤ä»˜æ•°é‡'							UNION ALL
+SELECT N'Amount',			N'å«ç¨Žé‡‘é¢,åŸºäºŽäº¤ä»˜æ•°é‡'				UNION ALL
+SELECT N'Currency',			N'è´§å¸'								UNION ALL
+SELECT N'VAT_Rate',			N'ç¨ŽçŽ‡'								UNION ALL
+SELECT N'DeliveryDate',		N'äº¤ä»˜æ—¶é—´'							UNION ALL
+SELECT N'OverdueDay',		N'é€¾æœŸå¤©æ•°'							UNION ALL
+SELECT N'Remark',			N'å¤‡æ³¨'								UNION ALL
+SELECT N'RecordDate',		N'åˆ›å»ºæ—¶é—´,é¦–æ¬¡è®°å½•'					UNION ALL
+SELECT N'AmendDateRecent',	N'ä¿®æ”¹æ—¶é—´,æœ€è¿‘è®°å½•'					UNION ALL
+SELECT N'TaxTag',			N'æ˜¯å¦å«ç¨Ž,å«ç¨Žæ ‡è®°'					UNION ALL
+SELECT N'Shortage',			N'çŸ­ç¼ºé‡,è´Ÿæ•°ä¸ºå°‘ç¼º,æ­£æ•°ä¸ºå¤šä½™'
 
---´ò¿ªÓÎ±ê,¿ªÊ¼¶ÁÈ¡´ÓÍ·µ½Î²¶ÁÈ¡¼ÇÂ¼¼¯,²¢¸³Öµ¸ø±äÁ¿
+--æ‰“å¼€æ¸¸æ ‡,å¼€å§‹è¯»å–ä»Žå¤´åˆ°å°¾è¯»å–è®°å½•é›†,å¹¶èµ‹å€¼ç»™å˜é‡
 OPEN CUR3
-FETCH NEXT FROM CUR3 INTO @mylevel2name,@myvalue --¶ÁÈ¡ÏÂÒ»ÐÐ¼ÇÂ¼,´ò¿ªÊ±Ã»¶Á
+FETCH NEXT FROM CUR3 INTO @mylevel2name,@myvalue --è¯»å–ä¸‹ä¸€è¡Œè®°å½•,æ‰“å¼€æ—¶æ²¡è¯»
 WHILE @@FETCH_STATUS = 0
 BEGIN
-	--Ìí¼Ó±íÉè¼ÆËµÃ÷
+	--æ·»åŠ è¡¨è®¾è®¡è¯´æ˜Ž
 	EXEC sys.sp_addextendedproperty @name		= @myname,
 									@value		= @myvalue,
 									@level0type = @mylevel0type,
@@ -232,7 +232,7 @@ BEGIN
 									@level2type = @mylevel2type,
 									@level2name = @mylevel2name;  
 	
-	FETCH NEXT FROM CUR3 INTO @mylevel2name,@myvalue --¶ÁÈ¡ÏÂÒ»ÐÐ¼ÇÂ¼,²»¶ÁÔòsi..ËÀÑ­»·
+	FETCH NEXT FROM CUR3 INTO @mylevel2name,@myvalue --è¯»å–ä¸‹ä¸€è¡Œè®°å½•,ä¸è¯»åˆ™si..æ­»å¾ªçŽ¯
 END
-CLOSE CUR3		--¹Ø±ÕÓÎ±ê
-DEALLOCATE CUR3	--ÊÍ·ÅÓÎ±ê
+CLOSE CUR3		--å…³é—­æ¸¸æ ‡
+DEALLOCATE CUR3	--é‡Šæ”¾æ¸¸æ ‡
